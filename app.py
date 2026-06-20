@@ -4,15 +4,7 @@ import plotly.express as px
 from datetime import datetime, timedelta
 import gspread
 from google.oauth2.service_account import Credentials
-st.write("STEP 1")
 
-df = load_sheet("MONITORING ")
-
-st.write("STEP 2")
-
-raw_sp2d = load_sheet("RAW_SP2D")
-
-st.write("STEP 3")
 
 now = datetime.utcnow() + timedelta(hours=7)
 
@@ -39,6 +31,16 @@ def load_sheet(sheet_name):
     data = worksheet.get_all_values()
 
     return pd.DataFrame(data)
+st.write("STEP 1")
+
+df = load_sheet("MONITORING ")
+
+st.write("STEP 2")
+
+raw_sp2d = load_sheet("RAW_SP2D")
+
+st.write("STEP 3")
+
 
 # Konfigurasi halaman
 st.set_page_config(
