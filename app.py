@@ -16,10 +16,10 @@ def load_sheet(sheet_name):
         "https://www.googleapis.com/auth/drive"
     ]
 
-    creds = Credentials.from_service_account_file(
-        "service_account.json",
-        scopes=scope
-    )
+    creds = Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],
+    scopes=scope
+)
 
     client = gspread.authorize(creds)
 
@@ -383,12 +383,6 @@ st.markdown('</div>', unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 
-# Ambil data RAW_SP2D sekali saja
-raw_sp2d = pd.read_excel(
-    "Website Dashboard.xlsx",
-    sheet_name="RAW_SP2D",
-    header=None
-)
 
 with col1:
 
