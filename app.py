@@ -547,12 +547,6 @@ with col3:
         detail_df["Kluster"].notna()
     ]
 
-    detail_df["Total"] = (
-        detail_df["51"] +
-        detail_df["52"] +
-        detail_df["57"]
-    )
-
     detail_df_format = detail_df.copy()
 
     for col in ["51", "52", "57", "Total"]:
@@ -563,6 +557,14 @@ with col3:
             if x > 0
             else "-"
         )
+
+    detail_df_format.columns = [
+    "Kluster",
+    "51",
+    "52",
+    "57",
+    "Total"
+]
 
     st.dataframe(
         detail_df_format,
