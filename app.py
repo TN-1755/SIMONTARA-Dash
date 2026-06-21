@@ -481,25 +481,30 @@ with col2:
 
     kekurangan_df = pd.DataFrame({
     "Kluster": raw_sp2d.iloc[11:19, 13].values,
-    "Kekurangan": clean_numeric(
+    "Nilai_Asli": clean_numeric(
         raw_sp2d.iloc[11:19, 16]
     )
 })
 
     kekurangan_df = kekurangan_df.iloc[::-1]
 
-    kekurangan_df["Warna"] = kekurangan_df["Kekurangan"].apply(
+    # panjang batang selalu positif
+    kekurangan_df["Nilai"] = kekurangan_df["Nilai_Asli"].abs()
+
+    # warna berdasarkan nilai asli
+    kekurangan_df["Warna"] = kekurangan_df["Nilai_Asli"].apply(
         lambda x: "#22C55E" if x > 0 else "#EF4444"
     )
 
+    # label tampilkan nilai asli
     kekurangan_df["Label"] = (
-        kekurangan_df["Kekurangan"]
+        kekurangan_df["Nilai_Asli"]
         .apply(lambda x: f"{x:,.0f}".replace(",", "."))
     )
 
     fig3 = px.bar(
         kekurangan_df,
-        x="Kekurangan",
+        x="Nilai",
         y="Kluster",
         orientation="h",
         text="Label"
