@@ -481,9 +481,9 @@ with col2:
 
     kekurangan_df = pd.DataFrame({
     "Kluster": raw_sp2d.iloc[11:19, 13].values,
-    "Kekurangan": clean_numeric(
-        raw_sp2d.iloc[11:19, 16]
-    ).abs()
+    "Kekurangan": -clean_numeric(
+    raw_sp2d.iloc[11:19, 16]
+).abs()
 })
 
     kekurangan_df = kekurangan_df.iloc[::-1]
@@ -495,17 +495,16 @@ with col2:
     )
 
     fig3 = px.bar(
-        kekurangan_df,
-        x="Kekurangan",
-        y="Kluster",
-        orientation="h",
-        text="Label"
-    )
+    kekurangan_df,
+    x="Kekurangan",
+    y="Kluster",
+    orientation="h",
+    text="Label"
+)
 
     fig3.update_traces(
-    marker_color="#DC2626",
-    textposition="outside",
-    cliponaxis=False
+    marker_color="#F97316",
+    textposition="outside"
 )
 
     fig3.update_layout(
@@ -576,8 +575,24 @@ with col3:
     </style>
     """, unsafe_allow_html=True)
 
-    st.dataframe(
-    detail_df_format,
+    styled_df = detail_df_format.style\
+    .set_properties(**{
+        'background-color': '#111827',
+        'color': 'white'
+    })\
+    .set_table_styles([
+        {
+            'selector':'th',
+            'props':[
+                ('background-color','#1E40AF'),
+                ('color','white'),
+                ('font-weight','bold')
+            ]
+        }
+    ])
+
+st.dataframe(
+    styled_df,
     use_container_width=True,
     hide_index=True,
     height=360
