@@ -492,6 +492,16 @@ with col2:
         lambda x: "#22C55E" if x > 0 else "#EF4444"
     )
 
+    # paksa semua batang ke kiri
+    kekurangan_df["Nilai_Grafik"] = -kekurangan_df["Kekurangan"].abs()
+
+    # label tetap menampilkan nilai asli
+    kekurangan_df["Label"] = (
+        kekurangan_df["Kekurangan"]
+        .apply(lambda x: f"{x:,.0f}".replace(",", "."))
+    )
+
+
     kekurangan_df["Label"] = (
         kekurangan_df["Kekurangan"]
         .apply(lambda x: f"{x:,.0f}".replace(",", "."))
@@ -499,7 +509,7 @@ with col2:
 
     fig3 = px.bar(
         kekurangan_df,
-        x="Kekurangan",
+        x="Nilai_Grafik",
         y="Kluster",
         orientation="h",
         text="Label"
