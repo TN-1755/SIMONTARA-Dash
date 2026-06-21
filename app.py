@@ -530,7 +530,7 @@ with col2:
 
 st.markdown("---")
 
-col3, col4 = st.columns(2)
+col3, col4 = st.columns([1.4, 1])
 
 with col3:
 
@@ -538,9 +538,9 @@ with col3:
 
     detail_df = pd.DataFrame({
         "Kluster": raw_sp2d.iloc[22:31, 13].values,
-        "51 (Belanja Pegawai)": clean_numeric(raw_sp2d.iloc[22:31, 14]),
-        "52 (Belanja Barang Jasa)": clean_numeric(raw_sp2d.iloc[22:31, 15]),
-        "57 (Belanja Bansos)": clean_numeric(raw_sp2d.iloc[22:31, 16])
+        "51": clean_numeric(raw_sp2d.iloc[22:31, 14]),
+        "52": clean_numeric(raw_sp2d.iloc[22:31, 15]),
+        "57": clean_numeric(raw_sp2d.iloc[22:31, 16])
     })
 
     detail_df = detail_df[
@@ -548,14 +548,19 @@ with col3:
     ]
 
     detail_df["Total"] = (
-        detail_df["51 (Belanja Pegawai)"] +
-        detail_df["52 (Belanja Barang Jasa)"] +
-        detail_df["57 (Belanja Bansos)"]
+        detail_df["51"] +
+        detail_df["52"] +
+        detail_df["57"]
+    )
+
+    detail_df = detail_df.sort_values(
+        "Total",
+        ascending=False
     )
 
     detail_df_format = detail_df.copy()
 
-    for col in detail_df_format.columns[1:]:
+    for col in ["51", "52", "57", "Total"]:
 
         detail_df_format[col] = detail_df_format[col].apply(
             lambda x:
@@ -564,50 +569,16 @@ with col3:
             else "-"
         )
 
-    detail_df = detail_df.sort_values(
-        "Total",
-        ascending=False
+    st.dataframe(
+        detail_df_format,
+        use_container_width=True,
+        hide_index=True,
+        height=320
     )
 
-    st.markdown("""
-<style>
-
-/* Kolom pertama (Kluster) tetap rata kiri */
-[data-testid="stDataFrame"] td:first-child {
-    text-align: left !important;
-}
-
-/* Kolom angka rata kanan */
-[data-testid="stDataFrame"] td:not(:first-child) {
-    text-align: right !important;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-    styled_table = (
-    detail_df_format.style
-    .set_properties(
-        subset=detail_df_format.columns[1:],
-        **{"text-align": "right"}
+    st.caption(
+        "📌 Realisasi per kluster berdasarkan jenis belanja"
     )
-    .set_properties(
-        subset=["Kluster"],
-        **{"text-align": "left"}
-    )
-    .set_table_styles([
-        {
-            "selector": "th",
-            "props": [
-                ("background-color", "#1E40AF"),
-                ("color", "white"),
-                ("font-weight", "bold")
-            ]
-        }
-    ])
-)
-
-st.table(styled_table)
 
 
 with col4:
