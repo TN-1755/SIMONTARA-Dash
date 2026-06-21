@@ -17,6 +17,7 @@ def load_sheet(sheet_name):
         "https://www.googleapis.com/auth/drive"
     ]
 
+
     creds = Credentials.from_service_account_info(
     st.secrets["gcp_service_account"],
     scopes=scope
@@ -38,6 +39,8 @@ df = load_sheet("MONITORING ")
 st.write("STEP 2")
 
 raw_sp2d = load_sheet("RAW_SP2D")
+
+raw_sp2d = raw_sp2d.replace("", 0)
 
 st.write("STEP 3")
 
@@ -398,22 +401,32 @@ col1, col2 = st.columns(2)
 
 with col1:
 
+    st.write(raw_sp2d.iloc[11:19, 17])
+
     st.subheader("📈 Capaian Realisasi (%)")
 
     capaian_df = pd.DataFrame({
-        "Kluster": raw_sp2d.iloc[11:19, 13].values,
-        "Persentase": raw_sp2d.iloc[11:19, 17].values * 100
-    })
+    "Kluster": raw_sp2d.iloc[11:19, 13].values,
+    "Persentase": pd.to_numeric(
+        raw_sp2d.iloc[11:19, 17],
+        errors="coerce"
+    ).fillna(0) * 100
+})
     
     capaian_df = capaian_df.iloc[::-1]
 
     # Format label persen
+    st.write(capaian_df)
+    st.stop()
+
     capaian_df["Label"] = (
-        capaian_df["Persentase"]
-        .round(0)
-        .astype(int)
-        .astype(str) + "%"
-    )
+    capaian_df["Persentase"]
+    .fillna(0)
+    .astype(float)
+    .round(0)
+    .astype(int)
+    .astype(str) + "%"
+)
 
     fig2 = px.bar(
         capaian_df,
