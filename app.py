@@ -32,17 +32,14 @@ def load_sheet(sheet_name):
     data = worksheet.get_all_values()
 
     return pd.DataFrame(data)
-st.write("STEP 1")
 
 df = load_sheet("MONITORING ")
 
-st.write("STEP 2")
 
 raw_sp2d = load_sheet("RAW_SP2D")
 
 raw_sp2d = raw_sp2d.replace("", 0)
 
-st.write("STEP 3")
 
 
 # Konfigurasi halaman
@@ -140,19 +137,24 @@ def format_rupiah(nilai):
 df = load_sheet("MONITORING ")
 raw_sp2d = load_sheet("RAW_SP2D")
 
-def angka_indonesia(x):
 
-    def clean_numeric(series):
-        return pd.to_numeric(
+def clean_numeric(series):
+    s = (
         series.astype(str)
         .str.replace("%", "", regex=False)
         .str.replace(".", "", regex=False)
-        .str.replace(",", "", regex=False)
         .str.replace("(", "-", regex=False)
         .str.replace(")", "", regex=False)
-        .str.strip(),
+        .str.strip()
+    )
+
+    return pd.to_numeric(
+        s,
         errors="coerce"
     ).fillna(0)
+
+
+def angka_indonesia(x):
 
     if pd.isna(x):
         return 0
@@ -182,6 +184,7 @@ def angka_indonesia(x):
         x.replace(".", "")
          .replace(",", ".")
     )
+    
 
 # RAW_SP2D
 raw_sp2d = raw_sp2d.replace("", 0)
@@ -351,8 +354,8 @@ st.caption(
 
 grafik_df = pd.DataFrame({
     "Jenis Belanja": raw_sp2d.iloc[4:7, 13].values,
-    "RPD": raw_sp2d.iloc[4:7, 14].values,
-    "Realisasi": raw_sp2d.iloc[4:7, 15].values
+    "RPD": clean_numeric(raw_sp2d.iloc[4:7, 14]),
+    "Realisasi": clean_numeric(raw_sp2d.iloc[4:7, 15])
 })
 
 # Ubah ke format panjang agar Plotly mudah membaca
