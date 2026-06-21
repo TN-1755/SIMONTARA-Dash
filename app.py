@@ -510,7 +510,7 @@ with col2:
 
     fig3.update_layout(
     height=350,
-    margin=dict(l=10, r=180, t=10, b=10),  # tambah ruang kanan
+    margin=dict(l=10, r=120, t=10, b=10),
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)",
     font=dict(color="white"),
@@ -521,6 +521,9 @@ with col2:
         showgrid=False,
         zeroline=False,
         visible=False
+    ),
+    yaxis=dict(
+        side="right"
     )
 )
 
