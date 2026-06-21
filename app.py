@@ -141,6 +141,19 @@ df = load_sheet("MONITORING ")
 raw_sp2d = load_sheet("RAW_SP2D")
 
 def angka_indonesia(x):
+
+    def clean_numeric(series):
+        return pd.to_numeric(
+        series.astype(str)
+        .str.replace("%", "", regex=False)
+        .str.replace(".", "", regex=False)
+        .str.replace(",", "", regex=False)
+        .str.replace("(", "-", regex=False)
+        .str.replace(")", "", regex=False)
+        .str.strip(),
+        errors="coerce"
+    ).fillna(0)
+
     if pd.isna(x):
         return 0
 
@@ -413,12 +426,11 @@ with col1:
     st.write(persentase_raw)
 
     capaian_df = pd.DataFrame({
-        "Kluster": raw_sp2d.iloc[11:19, 13].values,
-        "Persentase": pd.to_numeric(
-            persentase_raw,
-            errors="coerce"
-        ).fillna(0)
-    })
+    "Kluster": raw_sp2d.iloc[11:19, 13].values,
+    "Persentase": clean_numeric(
+        raw_sp2d.iloc[11:19, 17]
+    )
+})
 
     capaian_df = capaian_df.iloc[::-1]
 
@@ -469,10 +481,12 @@ with col2:
     st.subheader("📉 Kekurangan Realisasi")
 
     kekurangan_df = pd.DataFrame({
-        "Kluster": raw_sp2d.iloc[11:19, 13].values,
-        "Kekurangan": abs(raw_sp2d.iloc[11:19, 16].values)
-    })
-    
+    "Kluster": raw_sp2d.iloc[11:19, 13].values,
+    "Kekurangan": clean_numeric(
+        raw_sp2d.iloc[11:19, 16]
+    ).abs()
+})
+
     kekurangan_df = kekurangan_df.iloc[::-1]
     
     # Format angka dengan titik
@@ -528,11 +542,11 @@ with col3:
     "Realisasi anggaran berdasarkan akun belanja 51, 52 dan 57"
 )
     detail_df = pd.DataFrame({
-        "Kluster": raw_sp2d.iloc[22:31, 13].values,
-        "51": raw_sp2d.iloc[22:31, 14].values,
-        "52": raw_sp2d.iloc[22:31, 15].values,
-        "57": raw_sp2d.iloc[22:31, 16].values
-    })
+    "Kluster": raw_sp2d.iloc[22:31, 13].values,
+    "51": clean_numeric(raw_sp2d.iloc[22:31, 14]),
+    "52": clean_numeric(raw_sp2d.iloc[22:31, 15]),
+    "57": clean_numeric(raw_sp2d.iloc[22:31, 16])
+})
     detail_df = detail_df.dropna(how="all")
 
     detail_df = detail_df[
@@ -580,14 +594,16 @@ with col4:
     color:white;
     margin-bottom:10px;
     ">
-    🥧 Komposisi Realisasi
+    Komposisi Realisasi
     </h2>
     """, unsafe_allow_html=True)
 
     donut_df = pd.DataFrame({
-        "Kategori": raw_sp2d.iloc[4:7, 13].values,
-        "Nilai": raw_sp2d.iloc[4:7, 15].values
-    })
+    "Kategori": raw_sp2d.iloc[4:7, 13].values,
+    "Nilai": clean_numeric(
+        raw_sp2d.iloc[4:7, 15]
+    )
+})
 
     fig4 = px.pie(
         donut_df,
