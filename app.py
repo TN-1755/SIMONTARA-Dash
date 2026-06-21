@@ -503,13 +503,14 @@ with col2:
 )
 
     fig3.update_traces(
-    marker_color="#F97316",
-    textposition="outside"
+    marker_color="#EF4444",   # merah
+    textposition="outside",
+    cliponaxis=False          # supaya label tidak terpotong
 )
 
     fig3.update_layout(
     height=350,
-    margin=dict(l=10, r=120, t=10, b=10),
+    margin=dict(l=10, r=180, t=10, b=10),  # tambah ruang kanan
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)",
     font=dict(color="white"),
