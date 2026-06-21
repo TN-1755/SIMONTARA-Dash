@@ -537,7 +537,7 @@ with col3:
     st.subheader("📋 Detail Realisasi per Kluster")
 
     detail_df = pd.DataFrame({
-        "Kluster": raw_sp2d.iloc[22:31, 13].values,
+        "Kluster": raw_sp2d.iloc[22:31, 12].values,
         "51": clean_numeric(raw_sp2d.iloc[22:31, 14]),
         "52": clean_numeric(raw_sp2d.iloc[22:31, 15]),
         "57": clean_numeric(raw_sp2d.iloc[22:31, 16])
