@@ -585,12 +585,29 @@ with col3:
 </style>
 """, unsafe_allow_html=True)
 
-    st.dataframe(
-        detail_df_format,
-        use_container_width=True,
-        hide_index=True,
-        height=320
+    styled_table = (
+    detail_df_format.style
+    .set_properties(
+        subset=detail_df_format.columns[1:],
+        **{"text-align": "right"}
     )
+    .set_properties(
+        subset=["Kluster"],
+        **{"text-align": "left"}
+    )
+    .set_table_styles([
+        {
+            "selector": "th",
+            "props": [
+                ("background-color", "#1E40AF"),
+                ("color", "white"),
+                ("font-weight", "bold")
+            ]
+        }
+    ])
+)
+
+st.table(styled_table)
 
 
 with col4:
