@@ -401,32 +401,33 @@ col1, col2 = st.columns(2)
 
 with col1:
 
-    st.write(raw_sp2d.iloc[11:19, 17])
-
     st.subheader("📈 Capaian Realisasi (%)")
 
+    persentase_raw = (
+    raw_sp2d.iloc[11:19, 17]
+    .astype(str)
+    .str.extract(r'(\d+)')[0]
+)
+
+    st.write("HASIL BERSIH")
+    st.write(persentase_raw)
+
     capaian_df = pd.DataFrame({
-    "Kluster": raw_sp2d.iloc[11:19, 13].values,
-    "Persentase": pd.to_numeric(
-        raw_sp2d.iloc[11:19, 17],
-        errors="coerce"
-    ).fillna(0) * 100
-})
-    
+        "Kluster": raw_sp2d.iloc[11:19, 13].values,
+        "Persentase": pd.to_numeric(
+            persentase_raw,
+            errors="coerce"
+        ).fillna(0)
+    })
+
     capaian_df = capaian_df.iloc[::-1]
 
-    # Format label persen
-    st.write(capaian_df)
-    st.stop()
-
     capaian_df["Label"] = (
-    capaian_df["Persentase"]
-    .fillna(0)
-    .astype(float)
-    .round(0)
-    .astype(int)
-    .astype(str) + "%"
-)
+        capaian_df["Persentase"]
+        .round(0)
+        .astype(int)
+        .astype(str) + "%"
+    )
 
     fig2 = px.bar(
         capaian_df,
@@ -437,26 +438,26 @@ with col1:
     )
 
     fig2.update_traces(
-    marker_color="#60A5FA",
-    textposition="outside",
-    cliponaxis=False
-)
+        marker_color="#60A5FA",
+        textposition="outside",
+        cliponaxis=False
+    )
 
     fig2.update_layout(
-    height=350,
-    margin=dict(l=10, r=60, t=10, b=10),
-    plot_bgcolor="rgba(0,0,0,0)",
-    paper_bgcolor="rgba(0,0,0,0)",
-    font=dict(color="white"),
-    xaxis_title="",
-    yaxis_title="",
-    xaxis=dict(
-        showticklabels=False,
-        showgrid=False,
-        zeroline=False,
-        visible=False
+        height=350,
+        margin=dict(l=10, r=60, t=10, b=10),
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="white"),
+        xaxis_title="",
+        yaxis_title="",
+        xaxis=dict(
+            showticklabels=False,
+            showgrid=False,
+            zeroline=False,
+            visible=False
+        )
     )
-)
 
     st.plotly_chart(
         fig2,
