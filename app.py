@@ -530,7 +530,7 @@ with col2:
 
 st.markdown("---")
 
-col3, col4 = st.columns([1.4, 1])
+col3, col4 = st.columns([1.2, 1])
 
 with col3:
 
@@ -547,10 +547,17 @@ with col3:
         detail_df["Kluster"].notna()
     ]
 
+    # Kolom Total (hanya di kanan)
+    detail_df["Total"] = (
+        detail_df["51"] +
+        detail_df["52"] +
+        detail_df["57"]
+    )
+
     detail_df_format = detail_df.copy()
 
+    # Format angka Indonesia
     for col in ["51", "52", "57", "Total"]:
-
         detail_df_format[col] = detail_df_format[col].apply(
             lambda x:
             f"{int(x):,}".replace(",", ".")
@@ -558,20 +565,13 @@ with col3:
             else "-"
         )
 
-    detail_df_format.columns = [
-    "Kluster",
-    "51",
-    "52",
-    "57",
-    "Total"
-]
-
     st.dataframe(
         detail_df_format,
         use_container_width=True,
         hide_index=True,
         height=320
     )
+
 
 
 with col4:
